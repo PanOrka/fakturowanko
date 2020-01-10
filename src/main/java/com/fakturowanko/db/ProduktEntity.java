@@ -1,4 +1,4 @@
-package com.fakturowanko;
+package com.fakturowanko.db;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -6,13 +6,34 @@ import java.util.Objects;
 @Entity
 @Table(name = "produkt", schema = "fakturowanie", catalog = "")
 public class ProduktEntity {
-    private Integer idProduktu;
-    private String nazwa;
-    private Double cena;
-    private Byte sprzedawany;
 
     @Id
-    @Column(name = "id_produktu")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "id_produktu", unique = true, nullable = false)
+    private Integer idProduktu;
+
+    @Column(name = "nazwa")
+    private String nazwa;
+
+    @Column(name = "cena")
+    private Double cena;
+
+    @Column(name = "sprzedawany")
+    private boolean sprzedawany;
+
+
+    public ProduktEntity() {
+
+    }
+
+    public ProduktEntity(String nazwa, Double cena, boolean sprzedawany) {
+        this.idProduktu = null;
+        this.nazwa = nazwa;
+        this.cena = cena;
+        this.sprzedawany = sprzedawany;
+    }
+
     public Integer getIdProduktu() {
         return idProduktu;
     }
@@ -21,8 +42,6 @@ public class ProduktEntity {
         this.idProduktu = idProduktu;
     }
 
-    @Basic
-    @Column(name = "nazwa")
     public String getNazwa() {
         return nazwa;
     }
@@ -31,8 +50,6 @@ public class ProduktEntity {
         this.nazwa = nazwa;
     }
 
-    @Basic
-    @Column(name = "cena")
     public Double getCena() {
         return cena;
     }
@@ -41,13 +58,11 @@ public class ProduktEntity {
         this.cena = cena;
     }
 
-    @Basic
-    @Column(name = "sprzedawany")
-    public Byte getSprzedawany() {
+    public boolean getSprzedawany() {
         return sprzedawany;
     }
 
-    public void setSprzedawany(Byte sprzedawany) {
+    public void setSprzedawany(boolean sprzedawany) {
         this.sprzedawany = sprzedawany;
     }
 

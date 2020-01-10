@@ -1,4 +1,4 @@
-package com.fakturowanko;
+package com.fakturowanko.db;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -6,15 +6,29 @@ import java.util.Objects;
 @Entity
 @Table(name = "klient", schema = "fakturowanie", catalog = "")
 public class KlientEntity {
-    private Integer idKlienta;
-    private String nazwa;
-    private String nip;
-    private String miasto;
-    private String kodPocztowy;
-    private String adres;
 
     @Id
-    @Column(name = "id_klienta")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "id_klienta", unique = true, nullable = false)
+    private Integer idKlienta;
+
+    @Column(name = "nazwa")
+    private String nazwa;
+
+    @Column(name = "nip")
+    private String nip;
+
+    @Column(name = "miasto")
+    private String miasto;
+
+    @Column(name = "kod_pocztowy")
+    private String kodPocztowy;
+
+    @Column(name = "adres")
+    private String adres;
+
+
     public Integer getIdKlienta() {
         return idKlienta;
     }
@@ -23,8 +37,6 @@ public class KlientEntity {
         this.idKlienta = idKlienta;
     }
 
-    @Basic
-    @Column(name = "nazwa")
     public String getNazwa() {
         return nazwa;
     }
@@ -33,8 +45,6 @@ public class KlientEntity {
         this.nazwa = nazwa;
     }
 
-    @Basic
-    @Column(name = "nip")
     public String getNip() {
         return nip;
     }
@@ -43,8 +53,6 @@ public class KlientEntity {
         this.nip = nip;
     }
 
-    @Basic
-    @Column(name = "miasto")
     public String getMiasto() {
         return miasto;
     }
@@ -53,8 +61,6 @@ public class KlientEntity {
         this.miasto = miasto;
     }
 
-    @Basic
-    @Column(name = "kod_pocztowy")
     public String getKodPocztowy() {
         return kodPocztowy;
     }
@@ -63,8 +69,6 @@ public class KlientEntity {
         this.kodPocztowy = kodPocztowy;
     }
 
-    @Basic
-    @Column(name = "adres")
     public String getAdres() {
         return adres;
     }

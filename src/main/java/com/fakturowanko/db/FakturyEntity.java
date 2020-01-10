@@ -1,4 +1,4 @@
-package com.fakturowanko;
+package com.fakturowanko.db;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -7,11 +7,25 @@ import java.util.Objects;
 @Entity
 @Table(name = "faktury", schema = "fakturowanie", catalog = "")
 public class FakturyEntity {
-    private Integer idFaktury;
-    private Date data;
 
     @Id
-    @Column(name = "id_faktury")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "id_faktury", unique = true, nullable = false)
+    private Integer idFaktury;
+
+    @Column(name = "data")
+    private Date data;
+
+    public FakturyEntity() {
+
+    }
+
+    public FakturyEntity(Date data) {
+        this.idFaktury = null;
+        this.data = data;
+    }
+
     public Integer getIdFaktury() {
         return idFaktury;
     }
@@ -20,8 +34,6 @@ public class FakturyEntity {
         this.idFaktury = idFaktury;
     }
 
-    @Basic
-    @Column(name = "data")
     public Date getData() {
         return data;
     }

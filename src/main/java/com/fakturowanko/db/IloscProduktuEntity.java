@@ -1,19 +1,32 @@
-package com.fakturowanko;
+package com.fakturowanko.db;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
 @Table(name = "ilosc_produktu", schema = "fakturowanie", catalog = "")
 public class IloscProduktuEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "id", unique = true, nullable = false)
+    private Integer id;
+
+    @ManyToOne
+    @JoinColumn(name = "id_faktury", referencedColumnName = "id_faktury")
+    private FakturyEntity id_faktury;
+
+    @ManyToOne
+    @JoinColumn(name = "id_produktu", referencedColumnName = "id_produktu")
+    private ProduktEntity id_produktu;
+
+    @Column(name = "ilosc")
     private Integer ilosc;
+
+    @Column(name = "cena_zakupu")
     private Double cenaZakupu;
 
-    @Basic
-    @Column(name = "ilosc")
     public Integer getIlosc() {
         return ilosc;
     }
@@ -22,8 +35,6 @@ public class IloscProduktuEntity {
         this.ilosc = ilosc;
     }
 
-    @Basic
-    @Column(name = "cena_zakupu")
     public Double getCenaZakupu() {
         return cenaZakupu;
     }
