@@ -15,5 +15,15 @@
         <property name="yearIsDateType" value="false" />
       </driver-properties>
     </data-source>
+    <data-source source="LOCAL" name="com:fakturowanko:db:hibernate.cfg.xml/Hibernate" uuid="25dbd316-c7cd-413f-a28f-ce54dd1f7f6e">
+      <driver-ref>mysql</driver-ref>
+      <synchronize>true</synchronize>
+      <imported>true</imported>
+      <remarks>Hibernate
+
+C:/Users/dszyd/Documents/Szkola/Bazy/fakturowanko/src/main/java/com/fakturowanko/db/hibernate.cfg.xml</remarks>
+      <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://jdbc/fakturowanie</jdbc-url>
+    </data-source>
   </component>
 </project>
