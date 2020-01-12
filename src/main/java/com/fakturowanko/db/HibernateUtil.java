@@ -15,6 +15,9 @@ import org.hibernate.service.ServiceRegistry;
 
 public class HibernateUtil {
 
+    private static String user;
+    private static String password;
+
     private static SessionFactory sessionFactory;
 
     public static SessionFactory getSessionFactory() {
@@ -33,9 +36,9 @@ public class HibernateUtil {
 
                 settings.put(Environment.URL, "jdbc:mysql://localhost:3306/fakturowanie");
 
-                settings.put(Environment.USER, "root");
+                settings.put(Environment.USER, HibernateUtil.user);
 
-                settings.put(Environment.PASS, "");
+                settings.put(Environment.PASS, HibernateUtil.password);
 
                 settings.put(Environment.DIALECT, "org.hibernate.dialect.MySQL5Dialect");
 
@@ -68,6 +71,14 @@ public class HibernateUtil {
 
         return sessionFactory;
 
+    }
+
+    public static void setUser(String user) {
+        HibernateUtil.user = user;
+    }
+
+    public static void setPassword(String password) {
+        HibernateUtil.password = password;
     }
 
 }
