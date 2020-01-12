@@ -15,7 +15,7 @@ public class ProductQuantity {
      * ilosc produktu
      */
     private int productQuantity;
-
+    //TODO nie ma ceny produktu w chwili zakupu
     /**
      * konstruktor klasy
      * @param productId id produktu

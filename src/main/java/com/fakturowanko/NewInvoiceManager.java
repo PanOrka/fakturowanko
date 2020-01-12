@@ -12,8 +12,8 @@ import javax.swing.JOptionPane;
  */
 public class NewInvoiceManager implements ActionListener{
 
-    NewInvoiceFrame frame;
-    DataExpert dataExpert;
+    private NewInvoiceFrame frame;
+    private DataExpert dataExpert;
 
     /**
      * konstruktor
@@ -31,6 +31,8 @@ public class NewInvoiceManager implements ActionListener{
             addProduct();
         }
         else if(e.getSource() == frame.finalizeInvoice) {
+
+            //TODO dodawanie nowej fakturki
             dataExpert.addInvoice(frame.newInvoice);
 
             frame.setVisible(false);
@@ -43,6 +45,7 @@ public class NewInvoiceManager implements ActionListener{
      */
     private void addProduct() {
         String answerP = (String)JOptionPane.showInputDialog(frame, "Wybierz produkt", "Nowy produkt", JOptionPane.QUESTION_MESSAGE,null, frame.productNames,frame.productNames[0]);
+        //TODO znajdowanie produktu po nazwie
         Product newProduct = dataExpert.getProduct(answerP);
         String answerQ = JOptionPane.showInputDialog(frame, "Podaj ilosc produktu");
         try {
@@ -54,6 +57,7 @@ public class NewInvoiceManager implements ActionListener{
         }
         int quantity = Integer.parseInt(answerQ);
         if (quantity<=0) return;
+        //TODO dodawanie odpowiednich rekordow do ilosc_produktu
         frame.newInvoice.addProduct(newProduct, quantity);
         updateDisplay();
     }
@@ -64,6 +68,7 @@ public class NewInvoiceManager implements ActionListener{
     private void updateDisplay() {
         String display = "Dodane produkty:";
         for(int i=0;i<frame.newInvoice.getProductsQuantity();i++) {
+            //TODO znajdowanie nazwy produktu i ilosci dla danej faktury
             display+="\n"+dataExpert.getProductName(frame.newInvoice.getProductId(i))+" x "+frame.newInvoice.productQ.get(i).getProductQuantity();
         }
         frame.addedProducts.setText(display);

@@ -41,6 +41,7 @@ public class Invoice {
         return clientId;
     }
 
+    //TODO przy pobieraniu faktury z bazy trzeba bedzie ta funkcja przypisac jej odpowiednie rekordy z ilosc_produktow
     public void addProduct(Product product, int quantity) {
         ProductQuantity newOne = new ProductQuantity(product.getProductId(), quantity);
         productQ.add(newOne);

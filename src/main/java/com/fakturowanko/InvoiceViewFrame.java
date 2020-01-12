@@ -40,9 +40,12 @@ public class InvoiceViewFrame extends JFrame {
         setFont(new Font(Font.SANS_SERIF, Font.PLAIN,16));
         setLayout(new FlowLayout(FlowLayout.LEFT,30,30));
 
+        //TODO ma nie byc dataexperta, tylko pobieranie faktury z bazy po id
         this.dataExpert = dataExpert;
         invoice = dataExpert.getInvoice(invoiceId);
+        //TODO tu ma byc pobieranie klienta z bazy
         client = dataExpert.getClient(invoice.getClientId());
+
         clientData = new JPanel();
         clientData.setLayout(new GridLayout(4,1));
 
@@ -73,6 +76,7 @@ public class InvoiceViewFrame extends JFrame {
     private String setUpData() {
         String data = "Lp.\t|NAZWA\t|ILOSC\t|CENA\t|NETTO\t|VAT\t|BRUTTO";
         for(int i=0;i<invoice.getProductsQuantity();i++) {
+            //TODO szukanie ceny po id produktu
             double price = dataExpert.getProductPrice(invoice.productQ.get(i).getProductId());
             int quantity = invoice.productQ.get(i).getProductQuantity();
             double subTotal = getSubTotal(price, quantity);
@@ -128,6 +132,7 @@ public class InvoiceViewFrame extends JFrame {
     protected double getTotal() {
         double total = 0.0;
         for(int i=0;i<invoice.getProductsQuantity();i++) {
+            //TODO do product quantity trzeba dopisac pole z cena w momencie zakupu i tu z niej skorzystac
             total += dataExpert.getProductPrice(invoice.productQ.get(i).getProductId()) * invoice.productQ.get(i).getProductQuantity();
         }
         return total;

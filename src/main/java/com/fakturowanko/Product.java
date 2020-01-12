@@ -22,6 +22,11 @@ public class Product {
     private double price;
 
     /**
+     * czy w sprzedazy
+     */
+    private boolean sold;
+
+    /**
      * konstruktor produktow
      * @param productId id produktu
      * @param name nazwa produktu
@@ -31,6 +36,7 @@ public class Product {
         this.productId = productId;
         this.name = name;
         this.price = price;
+        this.sold = true;
     }
 
     public int getProductId() {
@@ -44,4 +50,13 @@ public class Product {
     public double getPrice() {
         return price;
     }
+
+    public boolean isSold() {
+        return sold;
+    }
+
+    public void setSold(boolean sold) {
+        this.sold = sold;
+    }
+
 }
