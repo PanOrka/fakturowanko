@@ -13,7 +13,7 @@ import javax.swing.JTextField;
 public class ClientDataInputPanel extends JPanel {
 
     private JTextField name;
-    private JTextField surname;
+    private JTextField postal_code;
     private JTextField adress;
     private JTextField city;
     private JTextField nip;
@@ -24,13 +24,9 @@ public class ClientDataInputPanel extends JPanel {
     ClientDataInputPanel(){
         setLayout(new GridLayout(5,2));
 
-        add(new JLabel("Imie: "));
+        add(new JLabel("Nazwa: "));
         name = new JTextField();
         add(name);
-
-        add(new JLabel("Nazwisko: "));
-        surname = new JTextField();
-        add(surname);
 
         add(new JLabel("NIP: "));
         nip = new JTextField();
@@ -40,9 +36,13 @@ public class ClientDataInputPanel extends JPanel {
         adress = new JTextField();
         add(adress);
 
-        add(new JLabel("Adres (kod pocztowy i miasto): "));
+        add(new JLabel("Miasto: "));
         city = new JTextField();
         add(city);
+
+        add(new JLabel("Kod pocztowy: "));
+        postal_code = new JTextField();
+        add(postal_code);
 
     }
 
@@ -50,8 +50,8 @@ public class ClientDataInputPanel extends JPanel {
         return name.getText();
     }
 
-    public String getSurname() {
-        return surname.getText();
+    public String getPostalCode() {
+        return postal_code.getText();
     }
 
     public String getAdress() {
