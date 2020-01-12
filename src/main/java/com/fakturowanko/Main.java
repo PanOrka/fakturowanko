@@ -13,9 +13,9 @@ import org.hibernate.Transaction;
 public class Main {
 
     public static void main(String[] args) {
-        //MainFrame f = new MainFrame();
+        MainFrame f = new MainFrame();
 
-        Transaction transaction = null;
+        /*Transaction transaction = null;
 
         ProduktEntity pe = new ProduktEntity("ogorek", 20.0, true);
 
@@ -43,7 +43,7 @@ public class Main {
 
             e.printStackTrace();
 
-        }
+        }*/
     }
 
 }
