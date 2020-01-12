@@ -11,16 +11,10 @@ public class EditFrame extends JFrame {
     protected JTextArea columns;
     protected JLabel operations;
     protected JComboBox options;
-    protected String[] colClient = {"Nazwa", "NIP", "Adres", "Miasto", "Kod pocztowy"};
-    protected String[] opClient = { "Dodaj", "Usun", "Zmien adres"};
-    protected String[] colInvoice = {"Id", "Klient", "Produkty"};
-    protected String[] opInvoice = {"Dodaj", "Usun"};
-    protected String[] colProduct = {"Id","Nazwa", "Cena", "Dostepnosc"};
-    protected String[] opProduct = { "Dodaj", "Usun", "Zmien cene", "Zmien dostepnosc"};
 
     public EditFrame(){
         super("Edycja");
-        setSize(350,400);
+        setSize(370,400);
         setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -47,6 +41,9 @@ public class EditFrame extends JFrame {
 
         operations = new JLabel("Operacje:");
         add(operations);
+
+        options = new JComboBox();
+        add(options);
 
         doButton = new JButton("Wykonaj");
         add(doButton);

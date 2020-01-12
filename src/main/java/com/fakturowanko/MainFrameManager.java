@@ -88,6 +88,7 @@ public class MainFrameManager implements ActionListener {
                 return 0;
             }
         }
+        //TODO dodawanie nowego klienta do bazy
         int newClientId = dataExpert.getNewClientId();
         dataExpert.addClient(newClientId, data.getCName(), data.getAdress(), data.getCity(), data.getPostalCode(), data.getNip());
         return newClientId;
@@ -95,7 +96,7 @@ public class MainFrameManager implements ActionListener {
 
     /**
      * pobiera od uzytkownika id klienta widniejacego w bazie i sprawdza jego poprawnosc
-     * @return poprawne id klienta lub 0, gdy dane s� nieprawidlowe
+     * @return poprawne id klienta lub 0, gdy dane sa nieprawidlowe
      */
     private int existingClient() {
         String stringId = JOptionPane.showInputDialog(frame, "Podaj ID klienta");
@@ -107,6 +108,7 @@ public class MainFrameManager implements ActionListener {
             return 0;
         }
         int clientId = Integer.parseInt(stringId);
+        //TODO count(id_klienta)
         if (clientId < 1 || clientId > dataExpert.clientList.size()) {
             JOptionPane.showMessageDialog(null, "Klient o podanym ID nie istnieje", "Blad!", JOptionPane.ERROR_MESSAGE);
             return 0;

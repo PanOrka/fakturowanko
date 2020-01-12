@@ -7,6 +7,7 @@ import java.util.ArrayList;
  * @author dszyd
  *
  */
+//TODO docelowo tej klasy ma nie być w ogole
 public class DataExpert {
 
     protected ArrayList<Client> clientList;
