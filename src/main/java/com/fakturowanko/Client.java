@@ -10,14 +10,9 @@ public class Client {
     private int clientId;
 
     /**
-     * imie klienta
+     * nazwa klienta
      */
     private String name;
-
-    /**
-     * nazwisko klienta
-     */
-    private String surname;
 
     /**
      * NIP klienta
@@ -30,25 +25,28 @@ public class Client {
     private String adress;
 
     /**
-     * adres klienta miasto i kod pocztowy
+     * adres klienta miasto
      */
     private String city;
 
+    /**
+     * kod pocztowy klienta
+     */
+    private String postal_code;
 
     /**
      * konstruktor tworzacy nowego klienta
      * @param clientId id klienta
      * @param name imie klienta
-     * @param surname nazwisko klienta
      * @param adress adres klienta
      * @param nip nip klienta
      */
-    Client (int clientId, String name, String surname, String adress, String city, String nip){
+    Client (int clientId, String name, String adress, String city, String postal_code, String nip){
         this.clientId = clientId;
         this.name = name;
-        this.surname = surname;
         this.adress = adress;
         this.city = city;
+        this.postal_code = postal_code;
         this.nip = nip;
     }
 
@@ -60,8 +58,8 @@ public class Client {
         return nip;
     }
 
-    public String getSurname() {
-        return surname;
+    public String getPostal_code() {
+        return postal_code;
     }
 
     public String getName() {

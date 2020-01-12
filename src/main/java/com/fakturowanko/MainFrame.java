@@ -17,13 +17,15 @@ public class MainFrame extends JFrame {
     protected JLabel frontLabel;
     protected JButton newButton;
     protected JButton viewButton;
+    protected JButton editButton;
+    protected JButton overviewButton;
 
     /**
      * defaultowy konstruktor
      */
     MainFrame(){
         super("Zadanie fakturowanie");
-        setSize(350,200);
+        setSize(350,250);
         setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -45,6 +47,14 @@ public class MainFrame extends JFrame {
         viewButton = new JButton("Wyswietl");
         add(viewButton);
         viewButton.addActionListener(manager);
+
+        editButton = new JButton("Edytuj baze");
+        add(editButton);
+        editButton.addActionListener(manager);
+
+        overviewButton = new JButton("Przegladaj baze");
+        add(overviewButton);
+        overviewButton.addActionListener(manager);
         setVisible(true);
 
     }
