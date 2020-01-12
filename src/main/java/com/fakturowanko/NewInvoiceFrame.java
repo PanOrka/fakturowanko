@@ -57,7 +57,7 @@ public class NewInvoiceFrame extends JFrame{
         clientData = new JPanel();
         clientData.setLayout(new GridLayout(4,1));
 
-        clientNS = new JLabel(client.getName()+" "+client.getSurname());
+        clientNS = new JLabel(client.getName());
         clientData.add(clientNS);
 
         clientNIP = new JLabel(client.getNip());
@@ -66,7 +66,7 @@ public class NewInvoiceFrame extends JFrame{
         clientA = new JLabel(client.getAdress());
         clientData.add(clientA);
 
-        clientC = new JLabel(client.getCity());
+        clientC = new JLabel(client.getCity()+" "+client.getPostal_code());
         clientData.add(clientC);
 
         add(clientData);

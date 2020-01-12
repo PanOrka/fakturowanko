@@ -18,7 +18,7 @@ public class DataExpert {
         clientList = new ArrayList<>();
         productList = new ArrayList<>();
         invoiceList = new ArrayList<>();
-        addClient(1, "Dominika", "Szydlo", "022899", "ul.Piastowska 34/4", "50-361 Wroclaw");
+        addClient(1, "Dominika Szydlo", "ul.Piastowska 34/4", "Wroclaw", "50-361","022899");
         addProduct(1, "Pad thai", 22.0);
         addProduct(2, "Krewetki", 34.50);
         addProduct(3, "Hummus", 15.0);
@@ -26,8 +26,8 @@ public class DataExpert {
         addProduct(5, "Hopium Ale", 9.80);
     }
 
-    protected void addClient(int id, String name, String surname, String nip, String adress, String city){
-        Client client = new Client(id, name, surname, adress, city, nip);
+    protected void addClient(int id, String name, String adress, String city, String postalC, String nip){
+        Client client = new Client(id, name, adress, city, postalC,nip);
         clientList.add(client);
     }
 

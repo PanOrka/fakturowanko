@@ -48,6 +48,12 @@ public class MainFrameManager implements ActionListener {
                 InvoiceViewFrame invoiceFrame = new InvoiceViewFrame(dataExpert, inId);
             }
         }
+        else if (source == frame.editButton){
+            EditFrame edit = new EditFrame();
+        }
+        else if (source == frame.overviewButton){
+            //TODO tu tez cos bedzie
+        }
     }
 
     /**
@@ -84,7 +90,7 @@ public class MainFrameManager implements ActionListener {
         }
         //TODO dodawanie nowego klienta do bazy
         int newClientId = dataExpert.getNewClientId();
-        dataExpert.addClient(newClientId, data.getCName(), data.getSurname(), data.getNip(), data.getAdress(), data.getCity());
+        dataExpert.addClient(newClientId, data.getCName(), data.getAdress(), data.getCity(), data.getPostalCode(), data.getNip());
         return newClientId;
     }
 

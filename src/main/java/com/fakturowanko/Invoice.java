@@ -1,6 +1,7 @@
 package com.fakturowanko;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * klasa obslugujaca faktury
@@ -25,12 +26,18 @@ public class Invoice {
     protected ArrayList<ProductQuantity> productQ = new ArrayList<>();
 
     /**
+     * data zakupu
+     */
+    protected Date data;
+
+    /**
      * tworzenie nowej faktury
      * @param clientId id klienta
      */
     Invoice(int invoiceId, int clientId){
         this.clientId = clientId;
         this.invoiceId = invoiceId;
+        this.data = new Date();
     }
 
     public int getInvoiceId() {
