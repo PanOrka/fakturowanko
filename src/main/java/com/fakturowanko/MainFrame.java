@@ -19,13 +19,14 @@ public class MainFrame extends JFrame {
     protected JButton viewButton;
     protected JButton editButton;
     protected JButton overviewButton;
+    protected JButton backupButton;
 
     /**
      * defaultowy konstruktor
      */
     MainFrame(){
         super("Zadanie fakturowanie");
-        setSize(350,250);
+        setSize(350,300);
         setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -55,6 +56,11 @@ public class MainFrame extends JFrame {
         overviewButton = new JButton("Przegladaj baze");
         add(overviewButton);
         overviewButton.addActionListener(manager);
+
+        backupButton = new JButton("Back-up");
+        add(backupButton);
+        backupButton.addActionListener(manager);
+
         setVisible(true);
 
     }
