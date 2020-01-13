@@ -47,24 +47,24 @@ public class NewInvoiceFrame extends JFrame{
         setFont(new Font(Font.SANS_SERIF, Font.PLAIN,16));
         setLayout(new FlowLayout(FlowLayout.LEFT,30,30));
 
-        NewInvoiceManager manager = new NewInvoiceManager(this, dataExpert);
-
         productList = dataExpert.getSoldProductList();
 
         if (productList.size() > 0) {
             productFinder = true;
             productNames = new Object[productList.size()];
             for (int i=0; i < productList.size(); i++) {
-                productNames[i] = productList.get(i).getIdProduktu() + "." +productList.get(i).getNazwa();
+                productNames[i] = productList.get(i).getIdProduktu() + ":" +productList.get(i).getNazwa();
             }
         } else {
             productFinder = false;
         }
 
         //TODO dodawanko faktury z id klienta
-        newInvoice = new Invoice(dataExpert.getNewInvoiceId(), clientId);
+        //newInvoice = new Invoice(dataExpert.getNewInvoiceId(), clientId);
 
         client = dataExpert.getClient(clientId);
+
+        NewInvoiceManager manager = new NewInvoiceManager(this, dataExpert, client);
 
         clientData = new JPanel();
         clientData.setLayout(new GridLayout(4,1));
