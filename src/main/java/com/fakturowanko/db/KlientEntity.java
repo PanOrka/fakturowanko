@@ -13,21 +13,32 @@ public class KlientEntity {
     @Column(name = "id_klienta", unique = true, nullable = false)
     private Integer idKlienta;
 
-    @Column(name = "nazwa")
+    @Column(name = "nazwa", nullable = false)
     private String nazwa;
 
     @Column(name = "nip")
     private String nip;
 
-    @Column(name = "miasto")
+    @Column(name = "miasto", nullable = false)
     private String miasto;
 
-    @Column(name = "kod_pocztowy")
+    @Column(name = "kod_pocztowy", nullable = false)
     private String kodPocztowy;
 
-    @Column(name = "adres")
+    @Column(name = "adres", nullable = false)
     private String adres;
 
+    public KlientEntity() {
+
+    }
+
+    public KlientEntity(String nazwa, String nip, String miasto, String kod_pocztowy, String adres) {
+        this.nazwa = nazwa;
+        this.nip = nip;
+        this.miasto = miasto;
+        this.kodPocztowy = kod_pocztowy;
+        this.adres = adres;
+    }
 
     public Integer getIdKlienta() {
         return idKlienta;

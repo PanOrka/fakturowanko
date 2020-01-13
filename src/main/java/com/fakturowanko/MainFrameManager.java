@@ -3,6 +3,7 @@ package com.fakturowanko;
 /**
  * klasa obslugujaca glowna ramke
  */
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -69,7 +70,7 @@ public class MainFrameManager implements ActionListener {
             clientId = existingClient();
         }
         if (clientId == 0) return;
-        NewInvoiceFrame newInvoiceFrame = new NewInvoiceFrame(clientId, dataExpert);
+        new NewInvoiceFrame(clientId, dataExpert);
     }
 
     /**
@@ -81,17 +82,24 @@ public class MainFrameManager implements ActionListener {
         int dataInput = JOptionPane.showConfirmDialog(frame, data, "Podaj dane klienta", JOptionPane.OK_CANCEL_OPTION);
         if (dataInput == JOptionPane.OK_OPTION) {
             try {
-                int nip = Integer.parseInt(data.getNip());
+                if (!data.getNip().equals("")) {
+                    Integer.parseInt(data.getNip());
+                }
             }
             catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(data, "Podano nieprawidlowy NIP", "Blad!", JOptionPane.ERROR_MESSAGE);
                 return 0;
             }
+        } else if (dataInput == JOptionPane.CANCEL_OPTION) {
+            return 0;
+        } else if (dataInput == JOptionPane.CLOSED_OPTION) {
+            return 0;
         }
         //TODO dodawanie nowego klienta do bazy
-        int newClientId = dataExpert.getNewClientId();
-        dataExpert.addClient(newClientId, data.getCName(), data.getAdress(), data.getCity(), data.getPostalCode(), data.getNip());
-        return newClientId;
+
+        // ZROBIONE DODAWANIE KLIENTA DO BAZY !!!!!!!!!!!!!!!!!!
+
+        return dataExpert.addClient(frame, data.getCName(), data.getAdress(), data.getCity(), data.getPostalCode(), data.getNip());
     }
 
     /**

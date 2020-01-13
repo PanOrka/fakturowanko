@@ -1,5 +1,7 @@
 package com.fakturowanko;
 
+import com.fakturowanko.db.KlientEntity;
+
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -27,7 +29,7 @@ public class NewInvoiceFrame extends JFrame{
 
     protected Object[] productNames;
     protected Invoice newInvoice;
-    private Client client;
+    private KlientEntity client;
 
     /**
      * defaultowy konstruktor
@@ -52,21 +54,23 @@ public class NewInvoiceFrame extends JFrame{
         newInvoice = new Invoice(dataExpert.getNewInvoiceId(), clientId);
 
         //TODO pobieranie klienta po id
+
+        // TERAZ POBIERA KlientEntity
         client = dataExpert.getClient(clientId);
 
         clientData = new JPanel();
         clientData.setLayout(new GridLayout(4,1));
 
-        clientNS = new JLabel(client.getName());
+        clientNS = new JLabel(client.getNazwa());
         clientData.add(clientNS);
 
         clientNIP = new JLabel(client.getNip());
         clientData.add(clientNIP);
 
-        clientA = new JLabel(client.getAdress());
+        clientA = new JLabel(client.getAdres());
         clientData.add(clientA);
 
-        clientC = new JLabel(client.getCity()+" "+client.getPostal_code());
+        clientC = new JLabel(client.getMiasto()+" "+client.getKodPocztowy());
         clientData.add(clientC);
 
         add(clientData);
