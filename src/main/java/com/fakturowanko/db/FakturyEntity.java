@@ -17,15 +17,17 @@ public class FakturyEntity {
     @Column(name = "data")
     private Date data;
 
-    @Column(name = "id_klienta")
-    private Integer idKlienta;
+    @ManyToOne
+    @JoinColumn(name = "id_klienta", referencedColumnName = "id_klienta")
+    private KlientEntity idKlienta;
 
     public FakturyEntity() {
 
     }
 
-    public FakturyEntity(Date data) {
+    public FakturyEntity(KlientEntity idKlienta, Date data) {
         this.idFaktury = null;
+        this.idKlienta = idKlienta;
         this.data = data;
     }
 
@@ -45,7 +47,7 @@ public class FakturyEntity {
         this.data = data;
     }
 
-    public Integer getIdKlienta() {
+    public KlientEntity getIdKlienta() {
         return idKlienta;
     }
 
