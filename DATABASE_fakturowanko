@@ -1,0 +1,64 @@
+CREATE OR REPLACE TABLE klient(
+    id_klienta int PRIMARY KEY AUTO_INCREMENT,
+    nazwa varchar(50) NOT NULL,
+    nip varchar(10) UNIQUE,
+    miasto varchar(30) NOT NULL,
+    kod_pocztowy varchar(6) NOT NULL,
+    adres varchar(50) NOT NULL,
+    CONSTRAINT nip_checker CHECK( ((CHAR_LENGTH(nip)=10) AND (nip REGEXP '^[0-9]+$')) OR nip IS NULL ),
+    CONSTRAINT postal_checker CHECK( CHAR_LENGTH(kod_pocztowy)=6 )
+);
+
+CREATE OR REPLACE TABLE faktury(
+    id_faktury int PRIMARY KEY AUTO_INCREMENT,
+    id_klienta int NOT NULL,
+    data date NOT NULL,
+    CONSTRAINT id_klienta_fk FOREIGN KEY(id_klienta) REFERENCES klient(id_klienta)
+);
+
+CREATE OR REPLACE TABLE produkt(
+    id_produktu int PRIMARY KEY AUTO_INCREMENT,
+    nazwa varchar(20) NOT NULL,
+    cena float NOT NULL,
+    sprzedawany boolean NOT NULL DEFAULT TRUE,
+    CONSTRAINT price_check CHECK ( cena > 0 )
+);
+
+CREATE OR REPLACE TABLE ilosc_produktu(
+    id int NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    id_faktury int NOT NULL,
+    id_produktu int NOT NULL,
+    ilosc int NOT NULL,
+    cena_zakupu float NOT NULL,
+    CONSTRAINT id_faktury_fkQuant FOREIGN KEY (id_faktury) REFERENCES faktury(id_faktury),
+    CONSTRAINT id_produktu_fkQuant FOREIGN KEY (id_produktu) REFERENCES produkt(id_produktu),
+    CONSTRAINT quantity_price_check CHECK ( ilosc > 0 AND cena_zakupu > 0 )
+);
+
+DELIMITER $$ # USELESS ale chcielismy miec pewnosc
+CREATE OR REPLACE TRIGGER deleteKlient BEFORE DELETE ON klient
+FOR EACH ROW
+BEGIN
+    SET @id = OLD.id_klienta;
+    IF (SELECT COUNT(id_faktury) FROM faktury WHERE id_faktury = @id) > 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Cannot delete user';
+    END IF;
+END; $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE OR REPLACE PROCEDURE deleteFakturaProc(IN id INT)
+BEGIN
+    START TRANSACTION;
+        DELETE FROM ilosc_produktu WHERE ilosc_produktu.id_faktury = id;
+    COMMIT;
+END; $$
+DELIMITER ;
+
+DELIMITER $$ # usuwanie faktury
+CREATE OR REPLACE TRIGGER deleteFaktura BEFORE DELETE ON faktury
+FOR EACH ROW
+BEGIN
+    CALL deleteFakturaProc(OLD.id_faktury);
+END; $$
+DELIMITER ;
