@@ -46,7 +46,7 @@ public class OverviewFrameManager implements ActionListener {
             builder.append(table.get(i).getMiasto());
             builder.append(" - ");
             builder.append(table.get(i).getKodPocztowy());
-            builder.append(" - ");
+            builder.append("\n");
         }
         text = builder.toString();
         frame.table.setText(text);
@@ -59,10 +59,10 @@ public class OverviewFrameManager implements ActionListener {
         for (int i=0;i<table.size();i++){
             builder.append(table.get(i).getIdFaktury());
             builder.append(" - ");
-            builder.append(table.get(i).getIdKlienta());
+            builder.append(table.get(i).getIdKlienta().getIdKlienta());
             builder.append(" - ");
             builder.append(table.get(i).getData());
-            builder.append(" - ");
+            builder.append("\n");
         }
         text = builder.toString();
         frame.table.setText(text);
