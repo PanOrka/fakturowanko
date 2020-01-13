@@ -1,8 +1,9 @@
 package com.fakturowanko;
 
-import com.fakturowanko.db.*;
-import org.hibernate.SQLQuery;
+import com.fakturowanko.db.HibernateUtil;
+import com.fakturowanko.db.KlientEntity;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import javax.swing.*;
@@ -14,7 +15,6 @@ import java.util.List;
  * @author dszyd
  *
  */
-//TODO docelowo tej klasy ma nie być w ogole
 public class DataExpert {
 
     protected ArrayList<Client> clientList;
@@ -25,7 +25,6 @@ public class DataExpert {
         clientList = new ArrayList<>();
         productList = new ArrayList<>();
         invoiceList = new ArrayList<>();
-//        addClient(1, "Dominika Szydlo", "ul.Piastowska 34/4", "Wroclaw", "50-361","022899");
         addProduct(1, "Pad thai", 22.0);
         addProduct(2, "Krewetki", 34.50);
         addProduct(3, "Hummus", 15.0);
@@ -33,7 +32,7 @@ public class DataExpert {
         addProduct(5, "Hopium Ale", 9.80);
     }
 
-    protected int addClient(MainFrame frame, String name, String adress, String city, String postalC, String nip) {
+    protected int addClient(JFrame frame, String name, String adress, String city, String postalC, String nip) {
         KlientEntity client;
         if (name.equals("") || adress.equals("") || city.equals("") || postalC.equals("")) {
             client = new KlientEntity(null, null, null, null, null);
@@ -48,13 +47,13 @@ public class DataExpert {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 
             session.beginTransaction();
-            actualId = (int)session.save(client);
+            session.save(client);
             session.getTransaction().commit();
 
-//            String hql = "SELECT MAX(Klient.idKlienta) FROM KlientEntity Klient";
-//            Query hqlQuery = session.createQuery(hql);
-//            List results = hqlQuery.list();
-//            actualId = (int)results.get(0);
+            String hql = "SELECT MAX(Klient.idKlienta) FROM KlientEntity Klient";
+            Query hqlQuery = session.createQuery(hql);
+            List results = hqlQuery.list();
+            actualId = (int)results.get(0);
 
         } catch (Exception e) {
             HibernateUtil.getSessionFactory().getCurrentSession().getTransaction().rollback();
@@ -70,36 +69,21 @@ public class DataExpert {
         productList.add(product);
     }
 
-    protected void addInvoice(List<ChoosenProds> choosenProds, KlientEntity clientId) {
-        List<java.sql.Date> results;
-
+    protected void removeClient(int id){
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            /*
-            // TUTAJ SQL BO CURDATE NIE DZIALA NO I MARIADB MA CURDATE()
-             */
-            SQLQuery hqlQuery = session.createSQLQuery("SELECT CURDATE()");
-
-            results = hqlQuery.list();
-            java.sql.Date date = results.get(0);
-            System.out.println(date);
-
-            FakturyEntity fe = new FakturyEntity(clientId, date);
             session.beginTransaction();
-            session.save(fe);
-
-            for (ChoosenProds cp: choosenProds) {
-                Query getProductQuery = session.createQuery("From ProduktEntity WHERE idProduktu = " + cp.getProduct_id());
-                List<ProduktEntity> products = getProductQuery.list();
-
-                IloscProduktuEntity ilp = new IloscProduktuEntity(fe, products.get(0), cp.getQuantity(), products.get(0).getCena());
-                session.save(ilp);
-            }
+            String hql = "DELETE KlientEntity Klient WHERE Klient.idKlienta = " + id;
+            Query q = session.createQuery(hql);
+            q.executeUpdate();
             session.getTransaction().commit();
-
         } catch (Exception e) {
-            HibernateUtil.getSessionFactory().getCurrentSession().getTransaction().rollback();
+            JOptionPane.showMessageDialog(null, "Podano zle dane", "Achtung!!!", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
+    }
+
+    protected void addInvoice(Invoice invoice){
+        invoiceList.add(invoice);
     }
 
     protected int getNewClientId() {
