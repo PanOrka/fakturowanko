@@ -1,5 +1,7 @@
 package com.fakturowanko;
 
+import com.fakturowanko.db.FakturyEntity;
+import com.fakturowanko.db.IloscProduktuEntity;
 import com.fakturowanko.db.KlientEntity;
 
 import java.awt.FlowLayout;
@@ -7,6 +9,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -21,7 +24,7 @@ import javax.swing.JTextArea;
 public class InvoiceViewFrame extends JFrame {
 
     private DataExpert dataExpert;
-    protected Invoice invoice;
+    protected FakturyEntity invoice;
     private JPanel clientData;
     private KlientEntity client;
     private JLabel clientNS;
@@ -42,11 +45,11 @@ public class InvoiceViewFrame extends JFrame {
         setFont(new Font(Font.SANS_SERIF, Font.PLAIN,16));
         setLayout(new FlowLayout(FlowLayout.LEFT,30,30));
 
-        //TODO ma nie byc dataexperta, tylko pobieranie faktury z bazy po id
         this.dataExpert = dataExpert;
-        invoice = dataExpert.getInvoice(invoiceId);
+
+        this.invoice = dataExpert.getInvoice(invoiceId);
         //TODO tu ma byc pobieranie klienta z bazy
-        client = dataExpert.getClient(invoice.getClientId());
+        client = dataExpert.getClient(invoice.getIdKlienta().getIdKlienta());
 
         clientData = new JPanel();
         clientData.setLayout(new GridLayout(4,1));
@@ -77,20 +80,22 @@ public class InvoiceViewFrame extends JFrame {
      */
     private String setUpData() {
         String data = "Lp.\t|NAZWA\t|ILOSC\t|CENA\t|NETTO\t|VAT\t|BRUTTO";
-        for(int i=0;i<invoice.getProductsQuantity();i++) {
+        List<IloscProduktuEntity> ipe = dataExpert.getProductsOfInvoice(invoice.getIdFaktury());
+
+        for(int i=0; i<ipe.size(); i++) {
             //TODO szukanie ceny po id produktu
-            double price = dataExpert.getProductPrice(invoice.productQ.get(i).getProductId());
-            int quantity = invoice.productQ.get(i).getProductQuantity();
+            double price = ipe.get(i).getCenaZakupu();
+            int quantity = ipe.get(i).getIlosc();
             double subTotal = getSubTotal(price, quantity);
             data += "\n"+Integer.toString(i+1)+"\t|";
-            data += dataExpert.getProductName(invoice.getProductId(i))+"\t|";
+            data += ipe.get(i).getProdukt().getNazwa()+"\t|";
             data += Integer.toString(quantity)+"\t|";
             data += getFormat(price)+"\t|";
             data += getNetto(subTotal)+"\t|";
             data += getVAT(subTotal)+"\t|";
             data += getFormat(subTotal);
         }
-        double total = getTotal();
+        double total = getTotal(ipe);
         data += "\n\n\t\t\tSUMA\t|"+getNetto(total)+"\t|"+getVAT(total)+"\t|"+getFormat(total);
         return data;
     }
@@ -131,11 +136,11 @@ public class InvoiceViewFrame extends JFrame {
      * liczy calkowita kwote faktury
      * @return calkowita kwota faktury
      */
-    protected double getTotal() {
+    protected double getTotal(List<IloscProduktuEntity> ipe) {
         double total = 0.0;
-        for(int i=0;i<invoice.getProductsQuantity();i++) {
+        for(int i=0;i<ipe.size();i++) {
             //TODO do product quantity trzeba dopisac pole z cena w momencie zakupu i tu z niej skorzystac
-            total += dataExpert.getProductPrice(invoice.productQ.get(i).getProductId()) * invoice.productQ.get(i).getProductQuantity();
+            total += ipe.get(i).getCenaZakupu()*ipe.get(i).getIlosc();
         }
         return total;
     }

@@ -54,6 +54,10 @@ public class IloscProduktuEntity {
         this.cenaZakupu = cenaZakupu;
     }
 
+    public ProduktEntity getProdukt() {
+        return this.id_produktu;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

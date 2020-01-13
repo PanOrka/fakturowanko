@@ -33,20 +33,22 @@ public class MainFrameManager implements ActionListener {
         }
         else if (source==frame.viewButton) {
             String invoiceId = JOptionPane.showInputDialog(frame, "Podaj ID faktury");
-            try {
-                int n = Integer.parseInt(invoiceId);
-            }
-            catch(NumberFormatException ex) {
-                JOptionPane.showMessageDialog(null, "Podano nieprawidlowe ID", "Blad!", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            int inId= Integer.parseInt(invoiceId);
-            if (inId<1 || inId>dataExpert.invoiceList.size()) {
-                JOptionPane.showMessageDialog(null, "Faktura o podanym ID nie istnieje", "Blad!", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            else {
-                InvoiceViewFrame invoiceFrame = new InvoiceViewFrame(dataExpert, inId);
+            if (invoiceId != null) {
+                try {
+                    int n = Integer.parseInt(invoiceId);
+                }
+                catch(NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Podano nieprawidlowe ID", "Blad!", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                int inId= Integer.parseInt(invoiceId);
+                if (!dataExpert.invoiceChecker(inId)) {
+                    JOptionPane.showMessageDialog(null, "Faktura o podanym ID nie istnieje", "Blad!", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                else {
+                    new InvoiceViewFrame(dataExpert, inId);
+                }
             }
         }
         else if (source == frame.editButton){
