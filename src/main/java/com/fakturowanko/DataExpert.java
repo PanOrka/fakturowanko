@@ -1,6 +1,14 @@
 package com.fakturowanko;
 
+import com.fakturowanko.db.HibernateUtil;
+import com.fakturowanko.db.KlientEntity;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
+
+import javax.swing.*;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * klasa obslugujaca baze danych
@@ -18,7 +26,7 @@ public class DataExpert {
         clientList = new ArrayList<>();
         productList = new ArrayList<>();
         invoiceList = new ArrayList<>();
-        addClient(1, "Dominika Szydlo", "ul.Piastowska 34/4", "Wroclaw", "50-361","022899");
+//        addClient(1, "Dominika Szydlo", "ul.Piastowska 34/4", "Wroclaw", "50-361","022899");
         addProduct(1, "Pad thai", 22.0);
         addProduct(2, "Krewetki", 34.50);
         addProduct(3, "Hummus", 15.0);
@@ -26,9 +34,36 @@ public class DataExpert {
         addProduct(5, "Hopium Ale", 9.80);
     }
 
-    protected void addClient(int id, String name, String adress, String city, String postalC, String nip){
-        Client client = new Client(id, name, adress, city, postalC,nip);
-        clientList.add(client);
+    protected int addClient(MainFrame frame, String name, String adress, String city, String postalC, String nip) {
+        KlientEntity client;
+        if (name.equals("") || adress.equals("") || city.equals("") || postalC.equals("")) {
+            client = new KlientEntity(null, null, null, null, null);
+        } else if (nip.equals("")){
+            client = new KlientEntity(name, null, city, postalC,adress);
+        } else {
+            client = new KlientEntity(name, nip, city, postalC,adress);
+        }
+
+        int actualId = 0;
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+
+            session.beginTransaction();
+            session.save(client);
+            session.getTransaction().commit();
+
+            String hql = "SELECT MAX(Klient.idKlienta) FROM KlientEntity Klient";
+            Query hqlQuery = session.createQuery(hql);
+            List results = hqlQuery.list();
+            actualId = (int)results.get(0);
+
+        } catch (Exception e) {
+            HibernateUtil.getSessionFactory().getCurrentSession().getTransaction().rollback();
+            JOptionPane.showMessageDialog(frame, "Bad Input data", "Achtung!!!", JOptionPane.WARNING_MESSAGE);
+            e.printStackTrace();
+        }
+
+        return actualId;
     }
 
     protected void addProduct(int id, String name, double price){
@@ -61,11 +96,51 @@ public class DataExpert {
         return null;
     }
 
-    protected Client getClient(int index) {
-        for(int i=0;i<clientList.size();i++) {
-            if(clientList.get(i).getClientId()==index) return clientList.get(i);
+    public boolean clientChecker(int clientId) {
+        List<Long> results = new ArrayList<>();
+        results.add((long)0);
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            String hql = "SELECT COUNT(*) FROM KlientEntity Klient WHERE idKlienta = ?1";
+            Query hqlQuery = session.createQuery(hql);
+            results = hqlQuery.setParameter(1, clientId).list();
+            System.out.println(results.get(0));
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return null;
+
+        return results.get(0).equals((long)1);
+    }
+
+    public KlientEntity getClient(int index) {
+        List<KlientEntity> results = new ArrayList();
+        results.add(null);
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            String hql = "FROM KlientEntity Klient WHERE Klient.idKlienta = " + index;
+            Query hqlQuery = session.createQuery(hql);
+            results = hqlQuery.list();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return results.get(0);
+    }
+
+    public List getProductList() {
+        List<ProductQuantity> results = new ArrayList();
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            String hql = "FROM ProduktEntity Products WHERE Products.sprzedawany = " + 1;
+            Query hqlQuery = session.createQuery(hql);
+            results = hqlQuery.list();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return results;
     }
 
     protected String getProductName(int index) {
