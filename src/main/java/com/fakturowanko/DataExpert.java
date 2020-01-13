@@ -129,7 +129,7 @@ public class DataExpert {
         return results.get(0);
     }
 
-    public List getProductList() {
+    public List getSoldProductList() {
         List<ProductQuantity> results = new ArrayList();
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             String hql = "FROM ProduktEntity Products WHERE Products.sprzedawany = " + 1;
@@ -139,7 +139,25 @@ public class DataExpert {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return results;
+    }
 
+    public static List getWholeTable(String name){
+        if(name.equals("produkt")){
+            name = "ProduktEntity";
+        } else if(name.equals("klient")){
+            name = "KlientEntity";
+        } else if(name.equals("faktura")){
+            name = "FakturyEntity";
+        }
+        List results = new ArrayList();
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            String hql = "FROM " + name;
+            Query hqlQuery = session.createQuery(hql);
+            results = hqlQuery.list();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return results;
     }
 

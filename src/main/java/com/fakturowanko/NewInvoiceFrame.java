@@ -53,13 +53,13 @@ public class NewInvoiceFrame extends JFrame{
 
         // TERAZ POBIERAM LISTE PRODUKTOW Z BAZY
 
-        productList = dataExpert.getProductList();
+        productList = dataExpert.getSoldProductList();
 
         if (productList.size() > 0) {
             productFinder = true;
             productNames = new Object[productList.size()];
             for (int i=0; i < productList.size(); i++) {
-                productNames[i] = productList.get(i).getIdProduktu() + "." + productList.get(i).getNazwa();
+                productNames[i] = /*productList.get(i).getIdProduktu() + "." +*/ productList.get(i).getNazwa();
             }
         } else {
             productFinder = false;
