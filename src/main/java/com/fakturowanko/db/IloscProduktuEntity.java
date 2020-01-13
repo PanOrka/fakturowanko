@@ -27,6 +27,17 @@ public class IloscProduktuEntity {
     @Column(name = "cena_zakupu")
     private Double cenaZakupu;
 
+    public IloscProduktuEntity() {
+
+    }
+
+    public IloscProduktuEntity(FakturyEntity id_faktury, ProduktEntity id_produktu, Integer ilosc, Double cenaZakupu) {
+        this.id_faktury = id_faktury;
+        this.id_produktu = id_produktu;
+        this.ilosc = ilosc;
+        this.cenaZakupu = cenaZakupu;
+    }
+
     public Integer getIlosc() {
         return ilosc;
     }

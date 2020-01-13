@@ -32,7 +32,6 @@ public class NewInvoiceFrame extends JFrame{
     protected boolean productFinder;
     protected Object[] productNames;
     private List<ProduktEntity> productList;
-    protected Invoice newInvoice;
     private KlientEntity client;
 
     /**
@@ -47,8 +46,6 @@ public class NewInvoiceFrame extends JFrame{
         setFont(new Font(Font.SANS_SERIF, Font.PLAIN,16));
         setLayout(new FlowLayout(FlowLayout.LEFT,30,30));
 
-        NewInvoiceManager manager = new NewInvoiceManager(this, dataExpert);
-
         //TODO znajdowanie wszystkich nazw produktow po id, ale tylko tych sprzedawanych
 
         // TERAZ POBIERAM LISTE PRODUKTOW Z BAZY
@@ -59,19 +56,21 @@ public class NewInvoiceFrame extends JFrame{
             productFinder = true;
             productNames = new Object[productList.size()];
             for (int i=0; i < productList.size(); i++) {
-                productNames[i] = /*productList.get(i).getIdProduktu() + "." +*/ productList.get(i).getNazwa();
+                productNames[i] = productList.get(i).getIdProduktu() + ":" + productList.get(i).getNazwa();
             }
         } else {
             productFinder = false;
         }
 
         //TODO dodawanko faktury z id klienta
-        newInvoice = new Invoice(dataExpert.getNewInvoiceId(), clientId);
+        //newInvoice = new Invoice(dataExpert.getNewInvoiceId(), clientId);
 
         //TODO pobieranie klienta po id
 
         // TERAZ POBIERA KlientEntity
         client = dataExpert.getClient(clientId);
+
+        NewInvoiceManager manager = new NewInvoiceManager(this, dataExpert, client);
 
         clientData = new JPanel();
         clientData.setLayout(new GridLayout(4,1));

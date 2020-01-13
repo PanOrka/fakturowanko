@@ -1,7 +1,11 @@
 package com.fakturowanko;
 
+import com.fakturowanko.db.KlientEntity;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 
@@ -14,15 +18,19 @@ public class NewInvoiceManager implements ActionListener{
 
     private NewInvoiceFrame frame;
     private DataExpert dataExpert;
+    private List<ChoosenProds> choosenProds;
+    private KlientEntity clientId;
 
     /**
      * konstruktor
      * @param frame ramka do wprowadzania faktury
      * @param dataExpert manager bazy danych
      */
-    NewInvoiceManager(NewInvoiceFrame frame, DataExpert dataExpert){
+    NewInvoiceManager(NewInvoiceFrame frame, DataExpert dataExpert, KlientEntity clientId){
+        this.clientId = clientId;
         this.frame = frame;
         this.dataExpert = dataExpert;
+        this.choosenProds = new ArrayList<>();
     }
 
     @Override
@@ -32,7 +40,12 @@ public class NewInvoiceManager implements ActionListener{
         } else if(e.getSource() == frame.finalizeInvoice) {
 
             //TODO dodawanie nowej fakturki
-            dataExpert.addInvoice(frame.newInvoice);
+
+            if (choosenProds.size() > 0) {
+                this.dataExpert.addInvoice(choosenProds, clientId);
+            }
+
+            //dataExpert.addInvoice(frame.newInvoice);
 
             frame.setVisible(false);
             frame.dispose();
@@ -47,20 +60,27 @@ public class NewInvoiceManager implements ActionListener{
     private void addProduct() {
         String answerP = (String)JOptionPane.showInputDialog(frame, "Wybierz produkt", "Nowy produkt", JOptionPane.QUESTION_MESSAGE,null, frame.productNames,frame.productNames[0]);
         //TODO znajdowanie produktu po nazwie
-        Product newProduct = dataExpert.getProduct(answerP);
-        String answerQ = JOptionPane.showInputDialog(frame, "Podaj ilosc produktu");
-        try {
-            int quantity = Integer.parseInt(answerQ);
+
+        if (answerP != null) {
+            String answerQ = JOptionPane.showInputDialog(frame, "Podaj ilosc produktu");
+            try {
+                int quantity = Integer.parseInt(answerQ);
+                if (quantity<=0) throw new NumberFormatException();
+                //TODO dodawanie odpowiednich rekordow do ilosc_produktu
+                this.parseAdd(answerP, quantity);
+                updateDisplay();
+            }
+            catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(frame, "Podano nieprawidlowa liczbe", "Blad!", JOptionPane.ERROR_MESSAGE);
+            }
         }
-        catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(frame, "Podano nieprawidlowa liczbe", "Blad!", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        int quantity = Integer.parseInt(answerQ);
-        if (quantity<=0) return;
-        //TODO dodawanie odpowiednich rekordow do ilosc_produktu
-        frame.newInvoice.addProduct(newProduct, quantity);
-        updateDisplay();
+    }
+
+    private void parseAdd(String answer, int quantity) throws NumberFormatException {
+        String[] splitted = answer.split(":", 2);
+        System.out.println(splitted[0]);
+        int id = Integer.parseInt(splitted[0]);
+        choosenProds.add(new ChoosenProds(id, splitted[1], quantity));
     }
 
     /**
@@ -68,11 +88,18 @@ public class NewInvoiceManager implements ActionListener{
      */
     private void updateDisplay() {
         String display = "Dodane produkty:";
-        for(int i=0;i<frame.newInvoice.getProductsQuantity();i++) {
-            //TODO znajdowanie nazwy produktu i ilosci dla danej faktury
-            display+="\n"+dataExpert.getProductName(frame.newInvoice.getProductId(i))+" x "+frame.newInvoice.productQ.get(i).getProductQuantity();
+
+        for (ChoosenProds cp: choosenProds) {
+            display += "\n" + cp.getName() + " x " + cp.getQuantity();
         }
+
         frame.addedProducts.setText(display);
+
+//        for(int i=0;i<frame.newInvoice.getProductsQuantity();i++) {
+//            //TODO znajdowanie nazwy produktu i ilosci dla danej faktury
+//            display+="\n"+dataExpert.getProductName(frame.newInvoice.getProductId(i))+" x "+frame.newInvoice.productQ.get(i).getProductQuantity();
+//        }
+//        frame.addedProducts.setText(display);
     }
 }
 
