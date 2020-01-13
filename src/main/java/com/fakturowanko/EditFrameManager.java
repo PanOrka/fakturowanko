@@ -12,7 +12,7 @@ public class EditFrameManager implements ActionListener {
     private String[] colInvoice = {"Id", "Klient", "Produkty"};
     private String[] opInvoice = {"Dodaj", "Usun"};
     private String[] colProduct = {"Id","Nazwa", "Cena", "Dostepnosc"};
-    private String[] opProduct = { "Dodaj", "Usun", "Zmien cene", "Zmien dostepnosc"};
+    private String[] opProduct = { "Dodaj", "Zmien cene", "Zmien dostepnosc"};
 
     public EditFrameManager(EditFrame frame){
         this.frame = frame;

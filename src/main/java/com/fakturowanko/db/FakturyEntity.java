@@ -17,6 +17,9 @@ public class FakturyEntity {
     @Column(name = "data")
     private Date data;
 
+    @Column(name = "id_klienta")
+    private Integer idKlienta;
+
     public FakturyEntity() {
 
     }
@@ -40,6 +43,10 @@ public class FakturyEntity {
 
     public void setData(Date data) {
         this.data = data;
+    }
+
+    public Integer getIdKlienta() {
+        return idKlienta;
     }
 
     @Override

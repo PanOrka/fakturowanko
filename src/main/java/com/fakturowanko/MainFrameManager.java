@@ -53,7 +53,7 @@ public class MainFrameManager implements ActionListener {
             EditFrame edit = new EditFrame();
         }
         else if (source == frame.overviewButton){
-            //TODO tu tez cos bedzie
+            new OverviewFrame();
         }
     }
 
@@ -95,10 +95,6 @@ public class MainFrameManager implements ActionListener {
         } else if (dataInput == JOptionPane.CLOSED_OPTION) {
             return 0;
         }
-        //TODO dodawanie nowego klienta do bazy
-
-        // ZROBIONE DODAWANIE KLIENTA DO BAZY !!!!!!!!!!!!!!!!!!
-
         return dataExpert.addClient(frame, data.getCName(), data.getAdress(), data.getCity(), data.getPostalCode(), data.getNip());
     }
 
@@ -116,9 +112,6 @@ public class MainFrameManager implements ActionListener {
             return 0;
         }
         int clientId = Integer.parseInt(stringId);
-        //TODO count(id_klienta)
-
-        // ZROBIONE SPRAWDZA CZY KLIENT JEST W BAZIE CZY NIE
 
         if (!dataExpert.clientChecker(clientId)) {
             JOptionPane.showMessageDialog(null, "Klient o podanym ID nie istnieje", "Blad!", JOptionPane.ERROR_MESSAGE);
