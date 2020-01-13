@@ -55,6 +55,9 @@ public class MainFrameManager implements ActionListener {
         else if (source == frame.overviewButton){
             new OverviewFrame();
         }
+        else if (source == frame.backupButton){
+            //TODO tu ma byc backup
+        }
     }
 
     /**
