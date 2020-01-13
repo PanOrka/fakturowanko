@@ -2,6 +2,7 @@ package com.fakturowanko;
 
 import com.fakturowanko.db.*;
 import org.hibernate.SQLQuery;
+
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
