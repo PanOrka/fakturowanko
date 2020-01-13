@@ -32,9 +32,13 @@ public class OverviewFrame extends JFrame {
         add(productButton);
         productButton.addActionListener(manager);
 
-        table = new JTextArea("tu pojawi sie tabela");
+        table = new JTextArea("tu pojawi sie tabela", 20, 50);
         table.setEditable(false);
         add(table);
+
+        JScrollPane scroll = new JScrollPane(table);
+        this.add(scroll);
+        pack();
 
         setVisible(true);
     }
