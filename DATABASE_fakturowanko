@@ -46,19 +46,10 @@ BEGIN
 END; $$
 DELIMITER ;
 
-DELIMITER $$
-CREATE OR REPLACE PROCEDURE deleteFakturaProc(IN id INT)
-BEGIN
-    START TRANSACTION;
-        DELETE FROM ilosc_produktu WHERE ilosc_produktu.id_faktury = id;
-    COMMIT;
-END; $$
-DELIMITER ;
-
 DELIMITER $$ # usuwanie faktury
 CREATE OR REPLACE TRIGGER deleteFaktura BEFORE DELETE ON faktury
 FOR EACH ROW
 BEGIN
-    CALL deleteFakturaProc(OLD.id_faktury);
+    DELETE FROM ilosc_produktu WHERE ilosc_produktu.id_faktury = OLD.id_faktury;
 END; $$
 DELIMITER ;
