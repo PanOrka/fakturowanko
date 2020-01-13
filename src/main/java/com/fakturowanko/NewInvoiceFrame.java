@@ -1,8 +1,12 @@
 package com.fakturowanko;
 
+import com.fakturowanko.db.KlientEntity;
+import com.fakturowanko.db.ProduktEntity;
+
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -25,9 +29,11 @@ public class NewInvoiceFrame extends JFrame{
     protected JButton finalizeInvoice;
     protected JTextArea addedProducts;
 
+    protected boolean productFinder;
     protected Object[] productNames;
+    private List<ProduktEntity> productList;
     protected Invoice newInvoice;
-    private Client client;
+    private KlientEntity client;
 
     /**
      * defaultowy konstruktor
@@ -44,29 +50,42 @@ public class NewInvoiceFrame extends JFrame{
         NewInvoiceManager manager = new NewInvoiceManager(this, dataExpert);
 
         //TODO znajdowanie wszystkich nazw produktow po id, ale tylko tych sprzedawanych
-        productNames = new Object[dataExpert.productList.size()];
-        for (int i=0;i<dataExpert.productList.size();i++) {
-            productNames[i] = dataExpert.productList.get(i).getName();
+
+        // TERAZ POBIERAM LISTE PRODUKTOW Z BAZY
+
+        productList = dataExpert.getProductList();
+
+        if (productList.size() > 0) {
+            productFinder = true;
+            productNames = new Object[productList.size()];
+            for (int i=0; i < productList.size(); i++) {
+                productNames[i] = productList.get(i).getIdProduktu() + "." + productList.get(i).getNazwa();
+            }
+        } else {
+            productFinder = false;
         }
+
         //TODO dodawanko faktury z id klienta
         newInvoice = new Invoice(dataExpert.getNewInvoiceId(), clientId);
 
         //TODO pobieranie klienta po id
+
+        // TERAZ POBIERA KlientEntity
         client = dataExpert.getClient(clientId);
 
         clientData = new JPanel();
         clientData.setLayout(new GridLayout(4,1));
 
-        clientNS = new JLabel(client.getName());
+        clientNS = new JLabel(client.getNazwa());
         clientData.add(clientNS);
 
         clientNIP = new JLabel(client.getNip());
         clientData.add(clientNIP);
 
-        clientA = new JLabel(client.getAdress());
+        clientA = new JLabel(client.getAdres());
         clientData.add(clientA);
 
-        clientC = new JLabel(client.getCity()+" "+client.getPostal_code());
+        clientC = new JLabel(client.getMiasto()+" "+client.getKodPocztowy());
         clientData.add(clientC);
 
         add(clientData);

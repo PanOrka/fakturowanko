@@ -27,16 +27,17 @@ public class NewInvoiceManager implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == frame.addProduct) {
+        if (e.getSource() == frame.addProduct && frame.productFinder) {
             addProduct();
-        }
-        else if(e.getSource() == frame.finalizeInvoice) {
+        } else if(e.getSource() == frame.finalizeInvoice) {
 
             //TODO dodawanie nowej fakturki
             dataExpert.addInvoice(frame.newInvoice);
 
             frame.setVisible(false);
             frame.dispose();
+        } else if (e.getSource() == frame.addProduct) {
+            JOptionPane.showMessageDialog(frame, "No products yet!", "Achtung!!!", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
