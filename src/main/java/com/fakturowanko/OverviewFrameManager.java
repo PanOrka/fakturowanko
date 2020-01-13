@@ -29,25 +29,25 @@ public class OverviewFrameManager implements ActionListener {
 
     private void displayClient(){
         List<KlientEntity> table = DataExpert.getWholeTable("klient");
-        String text = "Lp.\t|Nazwa\t\t|NIP\t|Adres\t\t|Miasto\t|Kod pocztowy\n";
+        String text = "Lp. - Nazwa - NIP - Adres - Miasto - Kod pocztowy\n";
         StringBuilder builder = new StringBuilder(text);
         for (int i=0;i<table.size();i++){
             builder.append(table.get(i).getIdKlienta());
-            builder.append("\t|");
+            builder.append(" - ");
             builder.append(table.get(i).getNazwa());
-            builder.append("\t|");
+            builder.append(" - ");
             if (table.get(i).getNip() != null){
                 builder.append(table.get(i).getNip());
             } else {
-                builder.append("-\t\t|");
+                builder.append(" - ");
             }
-            builder.append("\t|");
+            builder.append(" - ");
             builder.append(table.get(i).getAdres());
-            builder.append("\t|");
+            builder.append(" - ");
             builder.append(table.get(i).getMiasto());
-            builder.append("\t|");
+            builder.append(" - ");
             builder.append(table.get(i).getKodPocztowy());
-            builder.append("\n");
+            builder.append(" - ");
         }
         text = builder.toString();
         frame.table.setText(text);
@@ -55,15 +55,15 @@ public class OverviewFrameManager implements ActionListener {
 
     private void displayInvoice(){
         List<FakturyEntity> table = DataExpert.getWholeTable("faktura");
-        String text = "Id faktury\t|Id klienta\t|Data\n";
+        String text = "Id faktury - Id klienta - Data\n";
         StringBuilder builder = new StringBuilder(text);
         for (int i=0;i<table.size();i++){
             builder.append(table.get(i).getIdFaktury());
-            builder.append("\t|");
+            builder.append(" - ");
             builder.append(table.get(i).getIdKlienta());
-            builder.append("\t|");
+            builder.append(" - ");
             builder.append(table.get(i).getData());
-            builder.append("\n");
+            builder.append(" - ");
         }
         text = builder.toString();
         frame.table.setText(text);
@@ -71,15 +71,15 @@ public class OverviewFrameManager implements ActionListener {
 
     private void displayProduct(){
         List<ProduktEntity> table = DataExpert.getWholeTable("produkt");
-        String text = "Lp.\t|Nazwa\t|Cena\t|Czy w sprzedazy\n";
+        String text = "Lp. - Nazwa - Cena - Czy w sprzedazy\n";
         StringBuilder builder = new StringBuilder(text);
         for (int i=0;i<table.size();i++){
             builder.append(table.get(i).getIdProduktu());
-            builder.append("\t|");
+            builder.append(" - ");
             builder.append(table.get(i).getNazwa());
-            builder.append("\t|");
+            builder.append(" - ");
             builder.append(table.get(i).getCena());
-            builder.append("\t|");
+            builder.append(" - ");
             if (table.get(i).getSprzedawany()){
                 builder.append("tak");
             } else {

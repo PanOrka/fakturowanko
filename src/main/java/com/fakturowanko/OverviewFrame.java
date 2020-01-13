@@ -11,7 +11,7 @@ public class OverviewFrame extends JFrame {
 
     public OverviewFrame(){
         super("Przegladanie");
-        setSize(700,200);
+        setSize(600,500);
         setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -38,7 +38,7 @@ public class OverviewFrame extends JFrame {
 
         JScrollPane scroll = new JScrollPane(table);
         this.add(scroll);
-        pack();
+        //pack();
 
         setVisible(true);
     }
