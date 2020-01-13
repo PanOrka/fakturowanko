@@ -195,11 +195,31 @@ public class DataExpert {
         return null;
     }
 
-    protected Invoice getInvoice(int index) {
-        for (int i=0;i<invoiceList.size();i++) {
-            if(invoiceList.get(i).getInvoiceId()==index) return invoiceList.get(i);
+    protected FakturyEntity getInvoice(int index) {
+        List<FakturyEntity> results = new ArrayList<>();
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            String hql = "FROM FakturyEntity WHERE idFaktury = ?1";
+            Query hqlQuery = session.createQuery(hql);
+            results = hqlQuery.setParameter(1, index).list();
         }
-        return null;
+        return results.get(0);
+    }
+
+    protected boolean invoiceChecker(int invoiceId) {
+        List<Long> results = new ArrayList<>();
+        results.add((long)0);
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            String hql = "SELECT COUNT(*) FROM FakturyEntity Faktura WHERE idFaktury = ?1";
+            Query hqlQuery = session.createQuery(hql);
+            results = hqlQuery.setParameter(1, invoiceId).list();
+            System.out.println(results.get(0));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return results.get(0).equals((long)1);
     }
 
     protected double getProductPrice(int index) {
@@ -207,5 +227,19 @@ public class DataExpert {
             if(productList.get(i).getProductId()==index) return productList.get(i).getPrice();
         }
         return 0.0;
+    }
+
+    public List<IloscProduktuEntity> getProductsOfInvoice(int invoiceId) {
+        List<IloscProduktuEntity> ipe = new ArrayList<>();
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            String hql = "FROM IloscProduktuEntity WHERE id_faktury.idFaktury = ?1";
+            Query query = session.createQuery(hql);
+            ipe = query.setParameter(1, invoiceId).list();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return ipe;
     }
 }
