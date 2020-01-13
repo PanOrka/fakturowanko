@@ -32,6 +32,7 @@ public class IloscProduktuEntity {
     }
 
     public IloscProduktuEntity(FakturyEntity id_faktury, ProduktEntity id_produktu, Integer ilosc, Double cenaZakupu) {
+        this.id = null;
         this.id_faktury = id_faktury;
         this.id_produktu = id_produktu;
         this.ilosc = ilosc;
