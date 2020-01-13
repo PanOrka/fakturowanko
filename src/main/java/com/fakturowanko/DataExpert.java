@@ -1,6 +1,8 @@
 package com.fakturowanko;
 
+import com.fakturowanko.db.FakturyEntity;
 import com.fakturowanko.db.HibernateUtil;
+import com.fakturowanko.db.IloscProduktuEntity;
 import com.fakturowanko.db.KlientEntity;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
