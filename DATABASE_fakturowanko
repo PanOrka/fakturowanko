@@ -1,3 +1,21 @@
+CREATE USER 'ksiegowa'@'localhost';
+SET PASSWORD FOR 'ksiegowa'@'localhost' = PASSWORD('ksiegowa');
+GRANT SELECT ON fakturowanie.* TO 'ksiegowa'@'localhost';
+
+CREATE USER 'pracownik'@'localhost';
+SET PASSWORD FOR 'pracownik'@'localhost' = PASSWORD('pracownik');
+GRANT SELECT ON fakturowanie.* TO 'pracownik'@'localhost';
+GRANT INSERT ON fakturowanie.klient TO 'pracownik'@'localhost';
+GRANT INSERT ON fakturowanie.faktury TO 'pracownik'@'localhost';
+GRANT INSERT ON fakturowanie.ilosc_produktu TO 'pracownik'@'localhost';
+
+CREATE USER 'szef'@'localhost';
+SET PASSWORD FOR 'szef'@'localhost' = PASSWORD('szef');
+GRANT SELECT ON fakturowanie.* TO 'szef'@'localhost';
+GRANT INSERT ON fakturowanie.* TO 'szef'@'localhost';
+GRANT DELETE ON fakturowanie.* TO 'szef'@'localhost';
+GRANT UPDATE ON fakturowanie.* TO 'szef'@'localhost';
+
 CREATE OR REPLACE TABLE klient(
     id_klienta int PRIMARY KEY AUTO_INCREMENT,
     nazwa varchar(50) NOT NULL,
