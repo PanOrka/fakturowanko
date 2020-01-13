@@ -117,7 +117,10 @@ public class MainFrameManager implements ActionListener {
         }
         int clientId = Integer.parseInt(stringId);
         //TODO count(id_klienta)
-        if (clientId < 1 || clientId > dataExpert.clientList.size()) {
+
+        // ZROBIONE SPRAWDZA CZY KLIENT JEST W BAZIE CZY NIE
+
+        if (!dataExpert.clientChecker(clientId)) {
             JOptionPane.showMessageDialog(null, "Klient o podanym ID nie istnieje", "Blad!", JOptionPane.ERROR_MESSAGE);
             return 0;
         }

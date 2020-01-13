@@ -96,7 +96,24 @@ public class DataExpert {
         return null;
     }
 
-    protected KlientEntity getClient(int index) {
+    public boolean clientChecker(int clientId) {
+        List<Long> results = new ArrayList<>();
+        results.add((long)0);
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            String hql = "SELECT COUNT(*) FROM KlientEntity Klient WHERE idKlienta = ?1";
+            Query hqlQuery = session.createQuery(hql);
+            results = hqlQuery.setParameter(1, clientId).list();
+            System.out.println(results.get(0));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return results.get(0).equals((long)1);
+    }
+
+    public KlientEntity getClient(int index) {
         List<KlientEntity> results = new ArrayList();
         results.add(null);
 
@@ -110,6 +127,20 @@ public class DataExpert {
         }
 
         return results.get(0);
+    }
+
+    public List getProductList() {
+        List<ProductQuantity> results = new ArrayList();
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            String hql = "FROM ProduktEntity Products WHERE Products.sprzedawany = " + 1;
+            Query hqlQuery = session.createQuery(hql);
+            results = hqlQuery.list();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return results;
     }
 
     protected String getProductName(int index) {
