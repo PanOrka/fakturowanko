@@ -15,7 +15,6 @@ import java.util.List;
  * @author dszyd
  *
  */
-//TODO docelowo tej klasy ma nie być w ogole
 public class DataExpert {
 
     protected ArrayList<Client> clientList;
@@ -26,7 +25,6 @@ public class DataExpert {
         clientList = new ArrayList<>();
         productList = new ArrayList<>();
         invoiceList = new ArrayList<>();
-//        addClient(1, "Dominika Szydlo", "ul.Piastowska 34/4", "Wroclaw", "50-361","022899");
         addProduct(1, "Pad thai", 22.0);
         addProduct(2, "Krewetki", 34.50);
         addProduct(3, "Hummus", 15.0);
@@ -34,7 +32,7 @@ public class DataExpert {
         addProduct(5, "Hopium Ale", 9.80);
     }
 
-    protected int addClient(MainFrame frame, String name, String adress, String city, String postalC, String nip) {
+    protected int addClient(JFrame frame, String name, String adress, String city, String postalC, String nip) {
         KlientEntity client;
         if (name.equals("") || adress.equals("") || city.equals("") || postalC.equals("")) {
             client = new KlientEntity(null, null, null, null, null);
@@ -69,6 +67,19 @@ public class DataExpert {
     protected void addProduct(int id, String name, double price){
         Product product = new Product(id, name, price);
         productList.add(product);
+    }
+
+    protected void removeClient(int id){
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            session.beginTransaction();
+            String hql = "DELETE KlientEntity Klient WHERE Klient.idKlienta = " + id;
+            Query q = session.createQuery(hql);
+            q.executeUpdate();
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Podano zle dane", "Achtung!!!", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
     }
 
     protected void addInvoice(Invoice invoice){

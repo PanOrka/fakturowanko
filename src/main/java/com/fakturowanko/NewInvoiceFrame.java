@@ -49,17 +49,13 @@ public class NewInvoiceFrame extends JFrame{
 
         NewInvoiceManager manager = new NewInvoiceManager(this, dataExpert);
 
-        //TODO znajdowanie wszystkich nazw produktow po id, ale tylko tych sprzedawanych
-
-        // TERAZ POBIERAM LISTE PRODUKTOW Z BAZY
-
         productList = dataExpert.getSoldProductList();
 
         if (productList.size() > 0) {
             productFinder = true;
             productNames = new Object[productList.size()];
             for (int i=0; i < productList.size(); i++) {
-                productNames[i] = /*productList.get(i).getIdProduktu() + "." +*/ productList.get(i).getNazwa();
+                productNames[i] = productList.get(i).getIdProduktu() + "." +productList.get(i).getNazwa();
             }
         } else {
             productFinder = false;
@@ -68,9 +64,6 @@ public class NewInvoiceFrame extends JFrame{
         //TODO dodawanko faktury z id klienta
         newInvoice = new Invoice(dataExpert.getNewInvoiceId(), clientId);
 
-        //TODO pobieranie klienta po id
-
-        // TERAZ POBIERA KlientEntity
         client = dataExpert.getClient(clientId);
 
         clientData = new JPanel();
