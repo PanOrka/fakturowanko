@@ -1,9 +1,8 @@
 package com.fakturowanko;
 
-import com.fakturowanko.db.FakturyEntity;
-import com.fakturowanko.db.HibernateUtil;
-import com.fakturowanko.db.IloscProduktuEntity;
-import com.fakturowanko.db.KlientEntity;
+import com.fakturowanko.db.*;
+import org.hibernate.SQLQuery;
+
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
@@ -48,13 +47,13 @@ public class DataExpert {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 
             session.beginTransaction();
-            session.save(client);
+            actualId = (int)session.save(client);
             session.getTransaction().commit();
 
-            String hql = "SELECT MAX(Klient.idKlienta) FROM KlientEntity Klient";
-            Query hqlQuery = session.createQuery(hql);
-            List results = hqlQuery.list();
-            actualId = (int)results.get(0);
+//            String hql = "SELECT MAX(Klient.idKlienta) FROM KlientEntity Klient";
+//            Query hqlQuery = session.createQuery(hql);
+//            List results = hqlQuery.list();
+//            actualId = (int)results.get(0);
 
         } catch (Exception e) {
             HibernateUtil.getSessionFactory().getCurrentSession().getTransaction().rollback();
@@ -83,8 +82,36 @@ public class DataExpert {
         }
     }
 
-    protected void addInvoice(Invoice invoice){
-        invoiceList.add(invoice);
+    protected void addInvoice(List<ChoosenProds> choosenProds, KlientEntity clientId) {
+        List<java.sql.Date> results;
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            /*
+            // TUTAJ SQL BO CURDATE NIE DZIALA NO I MARIADB MA CURDATE()
+             */
+            SQLQuery hqlQuery = session.createSQLQuery("SELECT CURDATE()");
+
+            results = hqlQuery.list();
+            java.sql.Date date = results.get(0);
+            System.out.println(date);
+
+            FakturyEntity fe = new FakturyEntity(clientId, date);
+            session.beginTransaction();
+            session.save(fe);
+
+            for (ChoosenProds cp: choosenProds) {
+                Query getProductQuery = session.createQuery("From ProduktEntity WHERE idProduktu = " + cp.getProduct_id());
+                List<ProduktEntity> products = getProductQuery.list();
+
+                IloscProduktuEntity ilp = new IloscProduktuEntity(fe, products.get(0), cp.getQuantity(), products.get(0).getCena());
+                session.save(ilp);
+            }
+            session.getTransaction().commit();
+
+        } catch (Exception e) {
+            HibernateUtil.getSessionFactory().getCurrentSession().getTransaction().rollback();
+            e.printStackTrace();
+        }
     }
 
     protected int getNewClientId() {
