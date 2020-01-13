@@ -40,7 +40,7 @@ CREATE OR REPLACE TRIGGER deleteKlient BEFORE DELETE ON klient
 FOR EACH ROW
 BEGIN
     SET @id = OLD.id_klienta;
-    IF (SELECT COUNT(id_faktury) FROM faktury WHERE id_faktury = @id) > 0 THEN
+    IF (SELECT COUNT(id_faktury) FROM faktury WHERE id_klienta = @id) > 0 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Cannot delete user';
     END IF;
 END; $$
