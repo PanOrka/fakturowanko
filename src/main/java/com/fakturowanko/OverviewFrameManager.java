@@ -3,7 +3,6 @@ package com.fakturowanko;
 import com.fakturowanko.db.FakturyEntity;
 import com.fakturowanko.db.KlientEntity;
 import com.fakturowanko.db.ProduktEntity;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;

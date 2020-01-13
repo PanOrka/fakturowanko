@@ -21,7 +21,7 @@ public class EditFrameManager implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() != frame.doButton){
-            String build = "Kolumny:";
+            StringBuilder build = new StringBuilder("Kolumny:");
             frame.options.removeAllItems();
             String[] tableCol;
             String[] tableOp;
@@ -36,9 +36,9 @@ public class EditFrameManager implements ActionListener {
                 tableOp = opInvoice;
             }
             for (int i=0;i<tableCol.length;i++){
-                build+= "\n"+tableCol[i];
+                build.append("\n").append(tableCol[i]);
             }
-            frame.columns.setText(build);
+            frame.columns.setText(build.toString());
             for (int i=0;i<tableOp.length;i++){
                 frame.options.addItem(tableOp[i]);
             }
