@@ -17,21 +17,6 @@ import java.util.List;
  */
 public class DataExpert {
 
-    protected ArrayList<Client> clientList;
-    protected ArrayList<Product> productList;
-    protected ArrayList<Invoice> invoiceList;
-
-    DataExpert(){
-        clientList = new ArrayList<>();
-        productList = new ArrayList<>();
-        invoiceList = new ArrayList<>();
-        addProduct(1, "Pad thai", 22.0);
-        addProduct(2, "Krewetki", 34.50);
-        addProduct(3, "Hummus", 15.0);
-        addProduct(4, "Woda 0.5L", 3.90);
-        addProduct(5, "Hopium Ale", 9.80);
-    }
-
     protected int addClient(JFrame frame, String name, String adress, String city, String postalC, String nip) {
         KlientEntity client;
         if (name.equals("") || adress.equals("") || city.equals("") || postalC.equals("")) {
@@ -50,11 +35,6 @@ public class DataExpert {
             actualId = (int)session.save(client);
             session.getTransaction().commit();
 
-//            String hql = "SELECT MAX(Klient.idKlienta) FROM KlientEntity Klient";
-//            Query hqlQuery = session.createQuery(hql);
-//            List results = hqlQuery.list();
-//            actualId = (int)results.get(0);
-
         } catch (Exception e) {
             HibernateUtil.getSessionFactory().getCurrentSession().getTransaction().rollback();
             JOptionPane.showMessageDialog(frame, "Bad Input data", "Achtung!!!", JOptionPane.WARNING_MESSAGE);
@@ -64,9 +44,55 @@ public class DataExpert {
         return actualId;
     }
 
-    protected void addProduct(int id, String name, double price){
-        Product product = new Product(id, name, price);
-        productList.add(product);
+    protected int getNewestClientId(){
+        int id = 0;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+             String hql = "SELECT MAX(Klient.idKlienta) FROM KlientEntity Klient";
+             Query hqlQuery = session.createQuery(hql);
+             List results = hqlQuery.list();
+             id = (int)results.get(0);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return id;
+    }
+
+    protected void removeInvoice(int id){
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            session.beginTransaction();
+            String hql = "DELETE FakturyEntity WHERE idFaktury = "+id;
+            Query q = session.createQuery(hql);
+            q.executeUpdate();
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Podano zle dane", "Achtung!!!", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }
+
+    protected void updateAdress(int id, String adres, String miasto, String kod){
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            session.beginTransaction();
+            String hql1 = "UPDATE KlientEntity Klient set Klient.adres = :adres" + " WHERE Klient.idKlienta = :id";
+            Query query1 = session.createQuery(hql1);
+            query1.setParameter("adres", adres);
+            query1.setParameter("id",id);
+            query1.executeUpdate();
+            String hql2 = "UPDATE KlientEntity Klient set Klient.miasto = :miasto" + " WHERE Klient.idKlienta = :id";
+            Query query2 = session.createQuery(hql2);
+            query2.setParameter("miasto", miasto);
+            query2.setParameter("id",id);
+            query2.executeUpdate();
+            String hql3 = "UPDATE KlientEntity Klient set Klient.kodPocztowy = :kod" + " WHERE Klient.idKlienta = :id";
+            Query query3 = session.createQuery(hql3);
+            query3.setParameter("kod", kod);
+            query3.setParameter("id",id);
+            query3.executeUpdate();
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     protected void removeClient(int id){
@@ -78,6 +104,57 @@ public class DataExpert {
             session.getTransaction().commit();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Podano zle dane", "Achtung!!!", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }
+
+    protected void addProduct(String name, double price){
+        ProduktEntity product = new ProduktEntity(name, price, true);
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            session.beginTransaction();
+            session.save(product);
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            HibernateUtil.getSessionFactory().getCurrentSession().getTransaction().rollback();
+            e.printStackTrace();
+        }
+    }
+
+    protected void updatePrice(int id, double price){
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            session.beginTransaction();
+            String hql = "UPDATE ProduktEntity Produkt set Produkt.cena = :cena" + " WHERE Produkt.idProduktu = :id";
+            Query query = session.createQuery(hql);
+            query.setParameter("cena", price);
+            query.setParameter("id",id);
+            query.executeUpdate();
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected void updateState(int id){
+        List<ProduktEntity> results = new ArrayList();
+        boolean state;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            session.beginTransaction();
+            String hql1 = "FROM ProduktEntity Produkt WHERE Produkt.id = " + id;
+            Query hqlQuery = session.createQuery(hql1);
+            results = hqlQuery.list();
+            if (results.get(0).getSprzedawany()){
+                state = false;
+            }
+            else {
+                state = true;
+            }
+            String hql = "UPDATE ProduktEntity Produkt set Produkt.sprzedawany = :stan" + " WHERE Produkt.idProduktu = :id";
+            Query query = session.createQuery(hql);
+            query.setParameter("stan",state);
+            query.setParameter("id",id);
+            query.executeUpdate();
+            session.getTransaction().commit();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -112,27 +189,6 @@ public class DataExpert {
             HibernateUtil.getSessionFactory().getCurrentSession().getTransaction().rollback();
             e.printStackTrace();
         }
-    }
-
-    protected int getNewClientId() {
-        return clientList.size()+1;
-    }
-
-    protected int getNewProductId() {
-        return productList.size()+1;
-    }
-
-    protected int getNewInvoiceId() {
-        return invoiceList.size()+1;
-    }
-
-    protected Product getProduct(String name) {
-        for (int i=0;i<productList.size();i++) {
-            if(productList.get(i).getName().equals(name)) {
-                return productList.get(i);
-            }
-        }
-        return null;
     }
 
     public boolean clientChecker(int clientId) {
@@ -200,13 +256,6 @@ public class DataExpert {
         return results;
     }
 
-    protected String getProductName(int index) {
-        for(int i=0;i<productList.size();i++) {
-            if(productList.get(i).getProductId()==index) return productList.get(i).getName();
-        }
-        return null;
-    }
-
     protected FakturyEntity getInvoice(int index) {
         List<FakturyEntity> results = new ArrayList<>();
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -232,13 +281,6 @@ public class DataExpert {
         }
 
         return results.get(0).equals((long)1);
-    }
-
-    protected double getProductPrice(int index) {
-        for (int i=0;i<productList.size();i++) {
-            if(productList.get(i).getProductId()==index) return productList.get(i).getPrice();
-        }
-        return 0.0;
     }
 
     public List<IloscProduktuEntity> getProductsOfInvoice(int invoiceId) {
