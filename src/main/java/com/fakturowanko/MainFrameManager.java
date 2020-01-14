@@ -4,6 +4,8 @@ package com.fakturowanko;
  * klasa obslugujaca glowna ramke
  */
 
+import com.fakturowanko.db.BackupClass;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -58,7 +60,7 @@ public class MainFrameManager implements ActionListener {
             new OverviewFrame();
         }
         else if (source == frame.backupButton){
-            //TODO tu ma byc backup
+            BackupClass.makeBackupGreatAgain();
         }
     }
 
@@ -109,18 +111,21 @@ public class MainFrameManager implements ActionListener {
      */
     private int existingClient() {
         String stringId = JOptionPane.showInputDialog(frame, "Podaj ID klienta");
-        try {
-            int clientId = Integer.parseInt(stringId);
-        }
-        catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(null, "Podano nieprawidlowe ID", "Blad!", JOptionPane.ERROR_MESSAGE);
-            return 0;
-        }
-        int clientId = Integer.parseInt(stringId);
+        int clientId = 0;
+        if (stringId != null) {
+            try {
+                clientId = Integer.parseInt(stringId);
+            }
+            catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(null, "Podano nieprawidlowe ID", "Blad!", JOptionPane.ERROR_MESSAGE);
+                return 0;
+            }
+            clientId = Integer.parseInt(stringId);
 
-        if (!dataExpert.clientChecker(clientId)) {
-            JOptionPane.showMessageDialog(null, "Klient o podanym ID nie istnieje", "Blad!", JOptionPane.ERROR_MESSAGE);
-            return 0;
+            if (!dataExpert.clientChecker(clientId)) {
+                JOptionPane.showMessageDialog(null, "Klient o podanym ID nie istnieje", "Blad!", JOptionPane.ERROR_MESSAGE);
+                return 0;
+            }
         }
         return clientId;
     }
