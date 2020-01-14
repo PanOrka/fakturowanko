@@ -83,25 +83,76 @@ public class EditFrameManager implements ActionListener {
             int par = getParameter();
             data.removeClient(par);
         } else if (op == 2){
-
+            int par = getParameter();
+            AdressDataInputPanel dane = new AdressDataInputPanel();
+            int dataInput = JOptionPane.showConfirmDialog(frame, dane, "Podaj nowy adres", JOptionPane.OK_CANCEL_OPTION);
+            if (dataInput == JOptionPane.OK_OPTION) {
+                data.updateAdress(par, dane.getAdress(), dane.getCity(), dane.getPostalCode());
+            }
         }
     }
 
     private void editInvoice(int op){
         if (op == 0){
-
+            int clientId=0;
+            int answer = JOptionPane.showConfirmDialog(frame, "Czy klient juz widnieje w bazie?", "Wazne pytanie", JOptionPane.YES_NO_OPTION);
+            if (answer == JOptionPane.NO_OPTION) {
+                editClient(0);
+                data.getNewestClientId();
+            }
+            else if (answer == JOptionPane.YES_OPTION) {
+                String stringId = JOptionPane.showInputDialog(frame, "Podaj ID klienta");
+                try {
+                    clientId = Integer.parseInt(stringId);
+                }
+                catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Podano nieprawidlowe ID", "Blad!", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                clientId = Integer.parseInt(stringId);
+                if (!data.clientChecker(clientId)) {
+                    JOptionPane.showMessageDialog(null, "Klient o podanym ID nie istnieje", "Blad!", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
+            if (clientId == 0) return;
+            new NewInvoiceFrame(clientId, data);
         } else if (op == 1){
-
+            int par = getParameter();
+            data.removeInvoice(par);
         }
     }
 
     private void editProduct(int op){
         if (op == 0){
-
+            ProductDataInputPanel dane = new ProductDataInputPanel();
+            int dataInput = JOptionPane.showConfirmDialog(frame, dane, "Podaj dane produktu", JOptionPane.OK_CANCEL_OPTION);
+            if (dataInput == JOptionPane.OK_OPTION) {
+                try {
+                     Double.parseDouble(dane.getPrice());
+                } catch (NumberFormatException e){
+                    JOptionPane.showMessageDialog(null, "Podano nieprawidlowa cene", "Blad!", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                if (dane.getPName().equals("")) return;
+                data.addProduct(dane.getPName(), Double.parseDouble(dane.getPrice()));
+            }
         } else if (op == 1) {
-
+            int par = getParameter();
+            PriceInputPanel dane = new PriceInputPanel();
+            int dataInput = JOptionPane.showConfirmDialog(frame, dane, "Podaj nowa cene produktu", JOptionPane.OK_CANCEL_OPTION);
+            if (dataInput == JOptionPane.OK_OPTION) {
+                try {
+                    Double.parseDouble(dane.getPrice());
+                } catch (NumberFormatException e){
+                    JOptionPane.showMessageDialog(null, "Podano nieprawidlowa cene", "Blad!", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                data.updatePrice(par, Double.parseDouble(dane.getPrice()));
+            }
         } else if (op == 2){
-
+            int par = getParameter();
+            data.updateState(par);
         }
     }
 

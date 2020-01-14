@@ -36,6 +36,7 @@ public class IloscProduktuEntity {
         this.id_produktu = id_produktu;
         this.ilosc = ilosc;
         this.cenaZakupu = cenaZakupu;
+        this.id = null;
     }
 
     public Integer getIlosc() {
